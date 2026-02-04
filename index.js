@@ -9,6 +9,13 @@ app.get('/', async (_req, res) => {
   // TODO: Query the database to get all products from the 'books' table.
   // Send the list of products as a JSON response.
   // Handle potential errors with a try/catch block.
+  try {
+    const r = await db.query('select * from books');
+    res.json(r.rows);
+  } catch (error) {
+    console.error('List products error:', error);
+    res.status(500).json({error: 'Internal server error'});
+  }
 });
 
 // Get product by id
@@ -16,6 +23,15 @@ app.get('/:id', async (req, res) => {
   // TODO: Query the database for a single product by its ID.
   // If the product is found, send it as JSON.
   // If not found, send a 404 status.
+  try {
+    const id = req.params.id;
+    const r = await db.query('select * from books where id=', [id]);
+    if(r.rows.length === 0) return res.status(404).json({error: 'Product not found'});
+    res.json(r.row[0]);
+  } catch (error) {
+    console.error('Get product error:', error);
+    res.status(500).json({error: 'Internal server error'});
+  }
 });
 
 // Create product
