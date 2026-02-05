@@ -32,7 +32,6 @@ app.get('/:id', async (req, res) => {
     console.error('Get product error:', error);
     res.status(500).json({error: 'Internal server error'});
   }
-  
 });
 
 // Create product
