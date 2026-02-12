@@ -25,9 +25,9 @@ app.get('/:id', async (req, res) => {
   // If not found, send a 404 status.
   try {
     const id = req.params.id;
-    const r = await db.query('select * from books where id=', [id]);
+    const r = await db.query('SELECT * FROM books WHERE id = $1', [id]);
     if(r.rows.length === 0) return res.status(404).json({error: 'Product not found'});
-    res.json(r.row[0]);
+    res.json(r.rows[0]);
   } catch (error) {
     console.error('Get product error:', error);
     res.status(500).json({error: 'Internal server error'});
